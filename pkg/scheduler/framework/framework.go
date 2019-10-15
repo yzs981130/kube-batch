@@ -17,6 +17,7 @@ limitations under the License.
 package framework
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/golang/glog"
@@ -31,16 +32,19 @@ func OpenSession(cache cache.Cache, tiers []conf.Tier) *Session {
 	ssn := openSession(cache)
 	ssn.Tiers = tiers
 
+	fmt.Println("framework/framework.go: plugin name begins")
 	for _, tier := range tiers {
 		for _, plugin := range tier.Plugins {
 			if pb, found := GetPluginBuilder(plugin.Name); !found {
 				glog.Errorf("Failed to get plugin %s.", plugin.Name)
 			} else {
 				plugin := pb(plugin.Arguments)
+				fmt.Println(plugin.Name())
 				ssn.plugins[plugin.Name()] = plugin
 			}
 		}
 	}
+	fmt.Println("framework/framework.go: plugin name ends")
 
 	for _, plugin := range ssn.plugins {
 		onSessionOpenStart := time.Now()

@@ -374,6 +374,7 @@ func (ssn *Session) UpdateJobCondition(jobInfo *api.JobInfo, cond *api.PodGroupC
 
 	// Update condition to the new condition.
 	if index < 0 {
+		//???
 		job.PodGroup.Status.Conditions = append(job.PodGroup.Status.Conditions, *cond)
 	} else {
 		job.PodGroup.Status.Conditions[index] = *cond
